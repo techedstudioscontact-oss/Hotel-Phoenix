@@ -1,0 +1,895 @@
+<html>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Phoenix | Premium Stay on Mall Road, Mussoorie</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pine: {
+                            800: '#1a362d',
+                            900: '#11241e',
+                            950: '#0a1713',
+                        },
+                        misty: {
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            800: '#334155',
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        slate: {
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'map-placeholder': "linear-gradient(to right, rgba(17, 36, 30, 0.95), rgba(17, 36, 30, 0.8)), url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* Smooth reveals */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Delay utilities for staggered animations */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+
+        /* Glowing Amber Pulse */
+        @keyframes pulse-amber {
+            0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.6); }
+            70% { box-shadow: 0 0 0 20px rgba(217, 119, 6, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+        }
+        .btn-pulse {
+            animation: pulse-amber 2.5s infinite;
+        }
+
+        /* Glassmorphism nav variations */
+        .nav-scrolled {
+            background-color: rgba(2, 6, 23, 0.95); /* Solid Dark Slate 950 */
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.2);
+            transform: translateY(-40px); /* Hides top utility bar */
+        }
+        
+        .nav-scrolled .main-nav {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #1a362d; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d97706; }
+
+        /* Thin Taj-style dividers */
+        .taj-divider {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(217,119,6,0) 0%, rgba(217,119,6,0.5) 50%, rgba(217,119,6,0) 100%);
+        }
+
+        /* =========================================================
+           MASTERPIECE ANIMATED HERO BACKGROUND (SKY, MOUNTAINS, BIRDS)
+           ========================================================= */
+        .bg-scape {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            /* Cinematic Sky Blue Morning Gradient */
+            background: linear-gradient(180deg, #7dd3fc 0%, #e0f2fe 60%, #f0fdf4 100%);
+            z-index: 0;
+        }
+
+        .mountain-scaler {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            /* Responsive scaling to keep mountains majestic on all screens */
+            transform: translateX(-50%) scale(min(5, max(1.5, 100vw / 400)));
+            transform-origin: bottom center;
+            width: 100%;
+            height: 180px;
+            z-index: 1;
+        }
+
+        .mountain, .mountain-two, .mountain-three {
+            position: absolute;
+            bottom: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            z-index: 1;
+        }
+        /* Front Mountain - Deep misty pine/slate */
+        .mountain { border-bottom: 180px solid #0f172a; } 
+        
+        /* Middle Mountain */
+        .mountain-two { 
+            left: 30%; bottom: -20px; opacity: 0.85; z-index: 0; 
+            border-bottom: 180px solid #1e293b; 
+        }
+        
+        /* Back Mountain - Hazy light blue/green hint */
+        .mountain-three { 
+            left: 10%; bottom: -10px; opacity: 0.7; z-index: 0; 
+            border-bottom: 180px solid #38bdf8; 
+        }
+
+        /* Snow Caps */
+        .mountain-top {
+            position: absolute; right: -65px;
+            border-left: 65px solid transparent; border-right: 65px solid transparent;
+            border-bottom: 77px solid #f8fafc; z-index: 2;
+        }
+        .mountain-cap-1, .mountain-cap-2, .mountain-cap-3 {
+            position: absolute; top: 70px;
+            border-left: 25px solid transparent; border-right: 25px solid transparent;
+            border-top: 25px solid #f8fafc;
+        }
+        .mountain-cap-1 { left: -55px; } 
+        .mountain-cap-2 { left: -25px; } 
+        .mountain-cap-3 { left: 5px; }
+
+        /* Drifting Clouds */
+        .cloud, .cloud:before, .cloud:after {
+            position: absolute; width: 120px; height: 45px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 100px / 50px; filter: blur(6px);
+        }
+        .cloud { bottom: 150px; animation: cloud-drift 60s infinite linear; opacity: 0.6; }
+        .cloud:before { content: ''; left: 60px; top: 10px; }
+        .cloud:after { content: ''; left: 30px; top: -15px; }
+        
+        @keyframes cloud-drift {
+            0% { left: -200px; transform: scale(1); }
+            100% { left: 110vw; transform: scale(1.2); }
+        }
+
+        /* Flying Birds */
+        .bird {
+            background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg');
+            /* Styled as dark silhouettes against the morning sky */
+            filter: brightness(0.2) opacity(0.75);
+            background-size: auto 100%;
+            width: 88px; height: 125px;
+            will-change: background-position;
+            animation-name: fly-cycle;
+            animation-timing-function: steps(10);
+            animation-iteration-count: infinite;
+        }
+        .bird-one { animation-duration: 1s; animation-delay: -0.5s; }
+        .bird-two { animation-duration: 0.9s; animation-delay: -0.75s; }
+        .bird-three { animation-duration: 1.25s; animation-delay: -0.25s; }
+        .bird-four { animation-duration: 1.1s; animation-delay: -0.5s; }
+
+        .bird-container {
+            position: absolute; top: 15%; left: -10%;
+            transform: scale(0) translateX(-10vw);
+            will-change: transform;
+            animation-name: fly-right-one;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            z-index: 5;
+        }
+        .bird-container-one { animation-duration: 15s; animation-delay: 0; }
+        .bird-container-two { animation-duration: 16s; animation-delay: 1s; }
+        .bird-container-three { animation-duration: 14.6s; animation-delay: 9.5s; top: 25%; }
+        .bird-container-four { animation-duration: 16s; animation-delay: 10.25s; top: 10%; }
+
+        @keyframes fly-cycle { 100% { background-position: -900px 0; } }
+        
+        @keyframes fly-right-one {
+            0% { transform: scale(0.2) translateX(-10vw); }
+            10% { transform: translateY(2vh) translateX(10vw) scale(0.3); }
+            20% { transform: translateY(0vh) translateX(30vw) scale(0.4); }
+            30% { transform: translateY(4vh) translateX(50vw) scale(0.5); }
+            40% { transform: translateY(2vh) translateX(70vw) scale(0.5); }
+            50% { transform: translateY(0vh) translateX(90vw) scale(0.5); }
+            60% { transform: translateY(0vh) translateX(110vw) scale(0.5); }
+            100% { transform: translateY(0vh) translateX(110vw) scale(0.5); }
+        }
+
+        /* Luxury Glassmorphism Container */
+        .glass-hero-panel {
+            /* Made background nearly transparent to reveal the scenery */
+            background: rgba(255, 255, 255, 0.05);
+            /* Reduced blur so birds and mountains are sharply visible */
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            /* Softened border to match transparency */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="font-sans text-misty-800 bg-white antialiased overflow-x-hidden selection:bg-amber-500 selection:text-white">
+
+    <!-- Sticky Header with Utility Top Bar -->
+    <header id="header" class="fixed top-0 w-full z-50 transition-all duration-500 bg-gradient-to-b from-pine-950/70 via-pine-950/30 to-transparent border-b border-white/10">
+        <!-- Utility Bar (Hidden on scroll via transform) -->
+        <div class="h-10 border-b border-white/10 hidden lg:flex items-center justify-between px-6 md:px-12 text-[10px] uppercase tracking-widest text-white/90">
+            <div class="flex items-center gap-6">
+                <a href="tel:+917579176562" class="hover:text-amber-500 transition-colors drop-shadow-md">Toll Free: +91 75791 76562</a>
+                <span class="w-[1px] h-3 bg-white/40"></span>
+                <a href="mailto:reservations@hotelphoenix.com" class="hover:text-amber-500 transition-colors drop-shadow-md">reservations@hotelphoenix.com</a>
+            </div>
+            <div class="flex items-center gap-6">
+                <span class="text-amber-500 font-medium drop-shadow-md">★ 4.4 / 5 Rating</span>
+                <span class="w-[1px] h-3 bg-white/40"></span>
+                <a href="#" class="hover:text-amber-500 transition-colors drop-shadow-md">Log In</a>
+            </div>
+        </div>
+
+        <!-- Main Nav -->
+        <div class="main-nav transition-all duration-500 py-5 max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#hero" class="font-serif text-2xl md:text-3xl font-semibold text-white tracking-wide relative group flex flex-col items-start drop-shadow-lg">
+                <span>Hotel Phoenix<span class="text-amber-500">.</span></span>
+                <span class="text-[8px] uppercase tracking-[0.4em] text-white/80 font-sans mt-1">Mussoorie</span>
+            </a>
+            
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex space-x-8 xl:space-x-12 items-center text-white text-[11px] tracking-[0.2em] uppercase font-semibold drop-shadow-md">
+                <a href="#about" class="hover:text-amber-500 transition-colors duration-300">The Vibe</a>
+                <a href="#rooms" class="hover:text-amber-500 transition-colors duration-300">Accommodations</a>
+                <a href="#experience" class="hover:text-amber-500 transition-colors duration-300">Experiences</a>
+                <a href="#location" class="hover:text-amber-500 transition-colors duration-300">Location</a>
+                <a href="#whatsapp-booking" onclick="alert('Booking via WhatsApp initiated!')" class="px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-sm transition-all duration-300 shadow-lg border border-amber-500/50">Book Now</a>
+            </nav>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="lg:hidden text-white focus:outline-none hover:text-amber-500 transition-colors drop-shadow-lg">
+                <i class="ph ph-list text-3xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav Menu (Hidden by default) -->
+        <div id="mobile-menu" class="fixed inset-0 bg-slate-950/98 backdrop-blur-xl z-50 flex flex-col justify-center items-center translate-x-full transition-transform duration-500 ease-in-out lg:hidden">
+            <button id="close-menu-btn" class="absolute top-8 right-8 text-white/70 hover:text-white focus:outline-none transition-colors">
+                <i class="ph ph-x text-3xl"></i>
+            </button>
+            <nav class="flex flex-col space-y-8 text-center text-white text-2xl font-serif">
+                <a href="#about" class="mobile-link hover:text-amber-500 transition-colors">The Vibe</a>
+                <a href="#rooms" class="mobile-link hover:text-amber-500 transition-colors">Accommodations</a>
+                <a href="#experience" class="mobile-link hover:text-amber-500 transition-colors">Experiences</a>
+                <a href="#location" class="mobile-link hover:text-amber-500 transition-colors">Destination</a>
+                <a href="#whatsapp-booking" onclick="alert('Booking via WhatsApp initiated!')" class="mobile-link text-amber-500 mt-4 text-xl flex items-center justify-center gap-2">
+                    <i class="ph-fill ph-whatsapp-logo"></i> Book via WhatsApp
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 1. Hero Section -->
+    <section id="hero" class="relative w-full h-[100svh] min-h-[800px] flex items-center justify-center overflow-hidden">
+        
+        <!-- MASTERPIECE BACKGROUND -->
+        <div class="bg-scape">
+            <!-- Glowing Sun/Morning Light -->
+            <div class="absolute top-[20%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-amber-100/40 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <!-- Flying Birds -->
+            <div class="bird-container bird-container-one"><div class="bird bird-one"></div></div>        
+            <div class="bird-container bird-container-two"><div class="bird bird-two"></div></div>  
+            <div class="bird-container bird-container-three"><div class="bird bird-three"></div></div> 
+            <div class="bird-container bird-container-four"><div class="bird bird-four"></div></div>
+
+            <!-- Layered Clouds -->
+            <div class="cloud"></div>
+            <div class="cloud" style="bottom: 250px; animation-duration: 80s; transform: scale(1.5); opacity: 0.4; filter: blur(10px);"></div>
+            <div class="cloud" style="bottom: 350px; animation-duration: 45s; animation-delay: -20s; transform: scale(0.8); opacity: 0.7;"></div>
+
+            <!-- CSS Art Mountains -->
+            <div class="mountain-scaler">
+                <div class="mountain-three">
+                    <div class="mountain-top"><div class="mountain-cap-1"></div><div class="mountain-cap-2"></div><div class="mountain-cap-3"></div></div>
+                </div>
+                <div class="mountain-two">
+                    <div class="mountain-top"><div class="mountain-cap-1"></div><div class="mountain-cap-2"></div><div class="mountain-cap-3"></div></div>
+                </div>
+                <div class="mountain">
+                    <div class="mountain-top"><div class="mountain-cap-1"></div><div class="mountain-cap-2"></div><div class="mountain-cap-3"></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Masterpiece Glassmorphism Hero Panel -->
+        <div class="relative z-20 w-full px-6 flex justify-center mt-12 md:mt-16">
+            <div class="glass-hero-panel rounded-[2rem] p-10 md:p-16 max-w-4xl text-center reveal border-t border-white/60">
+                <span class="text-pine-900 uppercase tracking-[0.4em] text-xs md:text-sm mb-6 font-bold block drop-shadow-sm">The Queen of the Hills</span>
+                <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl text-pine-950 font-semibold leading-[1.1] mb-8 drop-shadow-md">
+                    Elevate Your Senses <br><span class="italic font-light text-pine-900">in Mussoorie.</span>
+                </h1>
+                <p class="text-pine-900/90 text-lg md:text-xl font-medium mb-10 max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
+                    A premium 3-star retreat right on The Mall Road. Experience breathtaking views, lush open lawns, and unmatched hospitality.
+                </p>
+                <!-- Primary WhatsApp CTA -->
+                <a href="#whatsapp-booking" onclick="alert('Booking via WhatsApp initiated!')" class="btn-pulse inline-flex items-center gap-3 bg-amber-600 hover:bg-amber-500 text-white px-10 py-5 rounded-full font-bold transition-all duration-300 shadow-[0_15px_30px_rgba(217,119,6,0.3)] hover:-translate-y-1 uppercase tracking-widest text-[11px]">
+                    <i class="ph-fill ph-whatsapp-logo text-xl"></i>
+                    Direct Booking via WhatsApp
+                </a>
+            </div>
+        </div>
+        
+        <!-- Taj-Style Booking Widget Bar -->
+        <div class="absolute bottom-0 left-0 w-full z-30 transform translate-y-1/2 hidden lg:flex justify-center px-6 reveal delay-400">
+            <div class="bg-white/95 backdrop-blur-md shadow-2xl rounded-sm p-4 flex items-center gap-4 border border-misty-200 max-w-5xl w-full">
+                <div class="flex-1 px-6 border-r border-misty-200">
+                    <p class="text-[10px] uppercase tracking-widest text-misty-800/60 mb-1">Check In</p>
+                    <p class="text-pine-950 font-medium cursor-pointer hover:text-amber-600 transition-colors">Select Date <i class="ph ph-caret-down ml-1"></i></p>
+                </div>
+                <div class="flex-1 px-6 border-r border-misty-200">
+                    <p class="text-[10px] uppercase tracking-widest text-misty-800/60 mb-1">Check Out</p>
+                    <p class="text-pine-950 font-medium cursor-pointer hover:text-amber-600 transition-colors">Select Date <i class="ph ph-caret-down ml-1"></i></p>
+                </div>
+                <div class="flex-1 px-6 border-r border-misty-200">
+                    <p class="text-[10px] uppercase tracking-widest text-misty-800/60 mb-1">Guests</p>
+                    <p class="text-pine-950 font-medium cursor-pointer hover:text-amber-600 transition-colors">2 Adults <i class="ph ph-caret-down ml-1"></i></p>
+                </div>
+                <div class="px-4">
+                    <a href="#whatsapp-booking" onclick="alert('Booking via WhatsApp initiated!')" class="bg-pine-950 text-white px-8 py-4 uppercase tracking-[0.15em] text-[10px] font-semibold hover:bg-amber-600 transition-colors block text-center rounded-sm shadow-md">
+                        Check Availability
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. About the Property (Editorial Split Layout) -->
+    <section id="about" class="py-28 md:py-40 bg-white relative mt-16 md:mt-0">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                
+                <!-- Editorial Image Collage -->
+                <div class="lg:col-span-6 relative reveal-left">
+                    <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1000&auto=format&fit=crop" alt="Hotel Exterior and Lawn" class="w-full h-[600px] object-cover rounded-sm shadow-xl">
+                    <!-- Offset smaller image -->
+                    <div class="absolute -bottom-12 -right-8 w-64 h-72 hidden md:block border-8 border-white shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop" alt="Lawn Seating Area" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="lg:col-span-6 lg:pl-12 reveal">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="h-[1px] w-12 bg-amber-600"></span>
+                        <h2 class="text-amber-600 text-xs font-semibold uppercase tracking-widest">The Vibe</h2>
+                    </div>
+                    <h3 class="font-serif text-4xl md:text-5xl text-pine-950 mb-8 leading-tight">Your Oasis on <br><i class="font-light">The Mall Road.</i></h3>
+                    <p class="text-misty-800/80 text-base leading-loose mb-6 font-light">
+                        Perfectly situated behind Hakman's Hotel near Jhula Ghar, Hotel Phoenix offers a rare combination in Mussoorie: direct access to the bustling Mall Road alongside a peaceful, expansive open lawn.
+                    </p>
+                    <p class="text-misty-800/80 text-base leading-loose mb-10 font-light">
+                        Enjoy your morning tea on our beautiful terrace overlooking the hills, step out right into the heart of the city's shopping and dining, and return to pristine, contemporary rooms designed for your absolute comfort. Rated 4.4 stars by hundreds of happy guests.
+                    </p>
+                    
+                    <a href="#experience" class="inline-flex items-center gap-3 text-pine-950 font-medium uppercase tracking-widest text-xs hover:text-amber-600 transition-colors group">
+                        Discover the Experience
+                        <span class="w-8 h-[1px] bg-pine-950 group-hover:bg-amber-600 transition-colors"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Rooms & Suites (Editorial Alternating Layout) -->
+    <section id="rooms" class="py-24 md:py-32 bg-misty-100">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            
+            <div class="text-center mb-20 reveal">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                    <span class="h-[1px] w-8 bg-amber-600"></span>
+                    <h2 class="text-amber-600 text-[10px] font-semibold uppercase tracking-[0.2em]">Accommodations</h2>
+                    <span class="h-[1px] w-8 bg-amber-600"></span>
+                </div>
+                <h3 class="font-serif text-4xl md:text-5xl text-pine-950 mb-6">Your Private Haven</h3>
+                <div class="taj-divider w-24 mx-auto mb-6"></div>
+                <p class="text-misty-800/70 max-w-2xl mx-auto text-lg font-light">Wake up to crisp alpine air. Our rooms feature pristine white linens, plush modern headboards, vibrant green accents, and abundant natural light.</p>
+            </div>
+
+            <div class="space-y-24 md:space-y-32">
+                <!-- Room 1 (Image Left, Text Right) -->
+                <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+                    <div class="w-full md:w-1/2 h-[500px] relative reveal-left overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?q=80&w=1000&auto=format&fit=crop" alt="Premium Room" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                        <div class="absolute top-6 left-6 bg-white/95 backdrop-blur px-4 py-2 rounded-sm text-[10px] font-bold text-pine-950 uppercase tracking-widest shadow-lg">Signature</div>
+                    </div>
+                    <div class="w-full md:w-1/2 reveal">
+                        <h4 class="font-serif text-3xl md:text-4xl text-pine-950 mb-4">Premium Valley View Room</h4>
+                        <div class="w-12 h-[1px] bg-amber-500 mb-6"></div>
+                        <p class="text-misty-800/80 text-base mb-8 leading-loose font-light">Step into brightness and elegance. Our premium rooms feature large windows framing the stunning Mussoorie landscape, complete with contemporary furnishings and modern en-suite amenities.</p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-10 text-pine-950 text-sm font-medium">
+                            <div class="flex items-center gap-3"><i class="ph ph-mountains text-xl text-amber-500"></i> Valley View</div>
+                            <div class="flex items-center gap-3"><i class="ph ph-wifi-high text-xl text-amber-500"></i> Free Wi-Fi</div>
+                            <div class="flex items-center gap-3"><i class="ph ph-television text-xl text-amber-500"></i> Smart TV</div>
+                            <div class="flex items-center gap-3"><i class="ph ph-coffee text-xl text-amber-500"></i> Tea/Coffee Maker</div>
+                        </div>
+                        <a href="#whatsapp-booking" onclick="alert('Booking via WhatsApp initiated!')" class="inline-block border border-pine-950 text-pine-950 hover:bg-pine-950 hover:text-white px-10 py-4 transition-colors duration-300 uppercase tracking-[0.15em] text-[10px] font-semibold">
+                            Inquire Now
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Room 2 (Text Left, Image Right) -->
+                <div class="flex flex-col md:flex-row-reverse items-center gap-12 lg:gap-20">
+                    <div class="w-full md:w-1/2 h-[500px] relative reveal overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1000&auto=format&fit=crop" alt="Luxury Suite" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                    </div>
+                    <div class="w-full md:w-1/2 reveal-left">
+                        <h4 class="font-serif text-3xl md:text-4xl text-pine-950 mb-4">The Phoenix Suite</h4>
+                        <div class="w-12 h-[1px] bg-amber-500 mb-6"></div>
+                        <p class="text-misty-800/80 text-base mb-8 leading-loose font-light">The pinnacle of our hospitality. Enjoy expansive living space, premium white bedding with elegant green accents, and unparalleled comfort. Designed for families and couples seeking a superior stay.</p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-10 text-pine-950 text-sm font-medium">
+                            <div class="flex items-center gap-3"><i class="ph ph-armchair text-xl text-amber-500"></i> Sitting Area</div>
+                            <div class="flex items-center gap-3"><i class="ph ph-bathtub text-xl text-amber-500"></i> Premium Bath</div>
+                            <div class="flex items-center gap-3"><i class="ph ph-bed text-xl text-amber-500"></i> King Size Bed</div>
+                            <div class="flex items-center gap-3"><i class="ph ph-wind text-xl text-amber-500"></i> Air Conditioning</div>
+                        </div>
+                        <a href="#whatsapp-booking" onclick="alert('Booking via WhatsApp initiated!')" class="inline-block border border-pine-950 text-pine-950 hover:bg-pine-950 hover:text-white px-10 py-4 transition-colors duration-300 uppercase tracking-[0.15em] text-[10px] font-semibold">
+                            Inquire Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Experience Section (Taj-Style Gallery) -->
+    <section id="experience" class="py-24 md:py-32 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-amber-600 text-[10px] font-semibold uppercase tracking-[0.2em] mb-4">Immerse</h2>
+                <h3 class="font-serif text-4xl md:text-5xl text-pine-950 mb-6">The Mussoorie Experience</h3>
+                <div class="taj-divider w-24 mx-auto mb-6"></div>
+                <p class="text-misty-800/70 max-w-2xl mx-auto text-lg font-light">Make unforgettable memories right in the heart of the hills.</p>
+            </div>
+
+            <!-- Gallery Layout (Images with clean text below) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+                <!-- Lawn -->
+                <div class="group cursor-pointer reveal">
+                    <div class="overflow-hidden rounded-sm mb-6 h-80">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop" alt="Open Lawn" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                    </div>
+                    <div class="text-center px-4">
+                        <i class="ph ph-sun text-2xl text-amber-500 mb-3"></i>
+                        <h4 class="font-serif text-2xl text-pine-950 mb-2 group-hover:text-amber-600 transition-colors">Terrace & Lawn</h4>
+                        <p class="text-sm text-misty-800/70 font-light leading-relaxed">Relax in our open-air spaces, soaking in the mountain sun with a warm cup of coffee.</p>
+                    </div>
+                </div>
+
+                <!-- Mall Road -->
+                <div class="group cursor-pointer reveal delay-100 mt-0 md:mt-12">
+                    <div class="overflow-hidden rounded-sm mb-6 h-80">
+                        <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1000&auto=format&fit=crop" alt="Mall Road Stroll" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                    </div>
+                    <div class="text-center px-4">
+                        <i class="ph ph-storefront text-2xl text-amber-500 mb-3"></i>
+                        <h4 class="font-serif text-2xl text-pine-950 mb-2 group-hover:text-amber-600 transition-colors">Mall Road Access</h4>
+                        <p class="text-sm text-misty-800/70 font-light leading-relaxed">Step directly out to Jhula Ghar and explore the vibrant shops and cafes of Mussoorie.</p>
+                    </div>
+                </div>
+
+                <!-- Views -->
+                <div class="group cursor-pointer reveal delay-200">
+                    <div class="overflow-hidden rounded-sm mb-6 h-80">
+                        <img src="https://images.unsplash.com/photo-1506462945848-ac8ea6f609cc?q=80&w=1000&auto=format&fit=crop" alt="Hill Views" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                    </div>
+                    <div class="text-center px-4">
+                        <i class="ph ph-mountains text-2xl text-amber-500 mb-3"></i>
+                        <h4 class="font-serif text-2xl text-pine-950 mb-2 group-hover:text-amber-600 transition-colors">Scenic Views</h4>
+                        <p class="text-sm text-misty-800/70 font-light leading-relaxed">Let the majestic Himalayan foothills serve as the perfect backdrop for your holiday.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Location & Accessibility -->
+    <section id="location" class="relative py-24 md:py-32 bg-slate-950 bg-map-placeholder bg-cover bg-center bg-fixed">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex justify-start md:justify-end">
+            <div class="bg-white/95 backdrop-blur-md p-10 md:p-14 max-w-lg shadow-2xl reveal rounded-sm border-t-4 border-amber-600">
+                <h2 class="text-amber-600 text-[10px] font-semibold uppercase tracking-[0.2em] mb-4">Destination</h2>
+                <h3 class="font-serif text-4xl text-pine-950 mb-8">Heart of Mussoorie</h3>
+                
+                <div class="flex items-start gap-5 mb-8 group">
+                    <div class="w-12 h-12 rounded-full bg-misty-100 flex items-center justify-center flex-shrink-0">
+                        <i class="ph-fill ph-map-pin text-2xl text-amber-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-pine-950 font-semibold mb-2">Hotel Phoenix</p>
+                        <p class="text-misty-800/80 text-sm leading-relaxed font-light">Mall Rd, behind Hakman's Hotel<br>near Shagun Palace Wedding Point,<br>Jhula Ghar, Mussoorie, Uttarakhand 248179</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-5 mb-10 group">
+                    <div class="w-12 h-12 rounded-full bg-misty-100 flex items-center justify-center flex-shrink-0">
+                        <i class="ph-fill ph-car-profile text-2xl text-amber-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-pine-950 font-semibold mb-2">Prime Accessibility</p>
+                        <p class="text-misty-800/80 text-sm leading-relaxed font-light">Located directly on The Mall Road, allowing you to walk to major attractions, restaurants, and viewpoints effortlessly.</p>
+                    </div>
+                </div>
+
+                <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-3 border border-pine-950 text-pine-950 hover:bg-pine-950 hover:text-white transition-colors px-8 py-4 w-full justify-center rounded-sm text-[10px] tracking-[0.15em] uppercase font-semibold">
+                    Get Directions 
+                    <i class="ph ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Legendary Footer & Branding -->
+    <footer id="contact" class="bg-pine-950 pt-24 pb-10 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+            
+            <!-- Majestic Pre-Footer CTA -->
+            <div class="text-center border-b border-white/10 pb-20 mb-20 reveal">
+                <i class="ph-fill ph-sparkle text-3xl text-amber-500 mb-6"></i>
+                <h2 class="font-serif text-5xl md:text-6xl text-white mb-6 italic">Your Hill Station Escape Awaits.</h2>
+                <div class="taj-divider w-32 mx-auto mb-8"></div>
+                <p class="text-white/60 font-light max-w-xl mx-auto mb-10 text-lg">Experience the pinnacle of comfort, serenity, and impeccable service in Mussoorie. Book directly with us for exclusive benefits.</p>
+                <a href="#whatsapp-booking" onclick="alert('Booking via WhatsApp initiated!')" class="inline-flex items-center gap-3 bg-white text-pine-950 hover:bg-amber-600 hover:text-white px-10 py-5 rounded-sm font-semibold transition-all duration-300 tracking-[0.15em] uppercase text-[10px]">
+                    Reserve Your Stay
+                </a>
+            </div>
+
+            <!-- 4-Column Footer Main Links -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
+                <!-- Brand Col -->
+                <div class="reveal">
+                    <a href="#hero" class="font-serif text-3xl font-semibold text-white tracking-wide block mb-2">
+                        Hotel Phoenix<span class="text-amber-500">.</span>
+                    </a>
+                    <p class="text-[10px] uppercase tracking-[0.4em] text-white/50 mb-6">Mussoorie</p>
+                    <p class="text-sm font-light text-white/60 leading-relaxed mb-8 pr-4">
+                        A premium 3-star haven blending mountain serenity with modern luxury, right on The Mall Road.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-white/50 hover:text-amber-500 transition-colors"><i class="ph-fill ph-instagram-logo text-2xl"></i></a>
+                        <a href="#" class="text-white/50 hover:text-amber-500 transition-colors"><i class="ph-fill ph-facebook-logo text-2xl"></i></a>
+                        <a href="#" class="text-white/50 hover:text-amber-500 transition-colors"><i class="ph-fill ph-twitter-logo text-2xl"></i></a>
+                    </div>
+                </div>
+
+                <!-- Explore Links -->
+                <div class="reveal delay-100 lg:pl-8">
+                    <h3 class="text-white font-semibold tracking-[0.2em] uppercase text-[10px] mb-8">Explore</h3>
+                    <ul class="space-y-4 text-sm font-light text-white/60">
+                        <li><a href="#about" class="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">The Vibe</a></li>
+                        <li><a href="#rooms" class="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Accommodations</a></li>
+                        <li><a href="#experience" class="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Immersive Experiences</a></li>
+                        <li><a href="#location" class="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Destination</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal / Policies -->
+                <div class="reveal delay-200">
+                    <h3 class="text-white font-semibold tracking-[0.2em] uppercase text-[10px] mb-8">Information</h3>
+                    <ul class="space-y-4 text-sm font-light text-white/60">
+                        <li><a href="#" class="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Terms & Conditions</a></li>
+                        <li><a href="#" class="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Cancellation Policy</a></li>
+                        <li><a href="#" class="hover:text-amber-500 hover:translate-x-1 inline-block transition-all duration-300">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter / Contact -->
+                <div class="reveal delay-300">
+                    <h3 class="text-white font-semibold tracking-[0.2em] uppercase text-[10px] mb-8">Stay Connected</h3>
+                    <p class="text-sm font-light text-white/60 mb-4">Subscribe for exclusive mountain offers.</p>
+                    <form class="flex mb-8 border-b border-white/30 focus-within:border-amber-500 transition-colors pb-2" onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
+                        <input type="email" placeholder="Email Address" required class="bg-transparent text-white text-sm focus:outline-none w-full placeholder:text-white/30 font-light">
+                        <button type="submit" class="text-white hover:text-amber-500 transition-colors">
+                            <i class="ph ph-arrow-right text-lg"></i>
+                        </button>
+                    </form>
+                    <div class="space-y-3 text-sm font-light text-white/80">
+                        <a href="tel:+917579176562" class="flex items-center gap-3 hover:text-amber-500 transition-colors">
+                            <i class="ph ph-phone text-amber-500"></i> +91 75791 76562
+                        </a>
+                        <a href="mailto:reservations@hotelphoenix.com" class="flex items-center gap-3 hover:text-amber-500 transition-colors">
+                            <i class="ph ph-envelope-simple text-amber-500"></i> reservations@hotelphoenix.com
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mandatory Footer Tagline & Copyright -->
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 reveal delay-400">
+                <p class="text-[10px] uppercase tracking-widest text-white/40 font-light">&copy; 2026 Hotel Phoenix. All rights reserved.</p>
+                <div class="flex items-center gap-2">
+                    <p class="text-[10px] tracking-[0.2em] uppercase text-white/50 font-medium">
+                        Designed & Developed by
+                    </p>
+                    <a href="#" class="text-amber-500 font-bold tracking-[0.2em] text-[10px] hover:text-white transition-colors flex items-center gap-1 group">
+                        TECHED STUDIOS
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= FLOATING UI ELEMENTS ================= -->
+
+    <!-- Floating WhatsApp CTA (Bottom Right) -->
+    <a href="#whatsapp-booking" onclick="alert('Directing to WhatsApp Chat...')" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform duration-300 btn-pulse cursor-pointer">
+        <i class="ph-fill ph-whatsapp-logo text-3xl md:text-4xl"></i>
+    </a>
+
+    <!-- Aiko AI Chat Interface (Bottom Left) -->
+    <div class="fixed bottom-6 left-6 z-50 flex flex-col items-start font-sans">
+        
+        <!-- Chat Window -->
+        <div id="aiko-chat-window" class="hidden w-[340px] bg-white rounded-xl shadow-2xl overflow-hidden border border-misty-200 mb-4 transition-all duration-300 origin-bottom-left transform scale-95 opacity-0">
+            <!-- Chat Header -->
+            <div class="bg-pine-950 p-4 flex justify-between items-center text-white border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center font-bold text-pine-950 text-lg shadow-inner">A</div>
+                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-pine-950 rounded-full"></div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-sm tracking-wide">Aiko AI</h4>
+                        <p class="text-[9px] text-amber-500 uppercase tracking-[0.1em] font-semibold">by Teched Studios</p>
+                    </div>
+                </div>
+                <button id="close-aiko-btn" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-colors">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+            
+            <!-- Chat Body -->
+            <div id="aiko-chat-body" class="h-72 p-5 bg-slate-50 overflow-y-auto flex flex-col gap-4 scroll-smooth">
+                <!-- Initial Welcome -->
+                <div class="flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-full bg-pine-900 flex-shrink-0 flex items-center justify-center text-white text-[10px] font-bold mt-1 shadow-sm">A</div>
+                    <div class="bg-white p-3.5 rounded-2xl rounded-tl-sm text-sm text-slate-700 shadow-sm border border-misty-200 leading-relaxed">
+                        Hello! Welcome to Hotel Phoenix. How can I assist you with your Mussoorie getaway today?
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Input -->
+            <form id="aiko-form" class="p-4 bg-white border-t border-misty-200 flex gap-3">
+                <input type="text" id="aiko-input" placeholder="Type your message..." autocomplete="off" class="flex-1 bg-slate-100 text-sm rounded-full px-5 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500 border border-transparent focus:bg-white transition-all placeholder:text-misty-800/40 text-slate-900 shadow-inner">
+                <button type="submit" class="w-10 h-10 rounded-full bg-pine-950 text-white flex items-center justify-center hover:bg-amber-600 hover:-rotate-12 transition-all shadow-md">
+                    <i class="ph-fill ph-paper-plane-right text-lg"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Floating Chat Button -->
+        <button id="aiko-toggle-btn" class="bg-white border border-misty-100 text-pine-950 px-5 md:px-6 py-3.5 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex items-center gap-3 hover:shadow-[0_15px_40px_rgba(0,0,0,0.15)] hover:-translate-y-1 transition-all duration-300 group">
+            <span class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></span>
+            </span>
+            <span class="font-semibold text-sm tracking-wide">Aiko AI</span>
+            <span class="text-[9px] text-amber-600 uppercase tracking-widest hidden group-hover:inline-block transition-all font-bold">(Teched Studios)</span>
+        </button>
+
+    </div>
+
+    <!-- Interactivity Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. Sticky Header & Scroll Effects ---
+            const header = document.getElementById('header');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('nav-scrolled');
+                    header.classList.remove('bg-gradient-to-b', 'from-pine-950/70', 'via-pine-950/30', 'to-transparent', 'border-white/10');
+                } else {
+                    header.classList.remove('nav-scrolled');
+                    header.classList.add('bg-gradient-to-b', 'from-pine-950/70', 'via-pine-950/30', 'to-transparent', 'border-white/10');
+                }
+            });
+
+            // --- 2. Mobile Menu Logic ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                mobileMenu.classList.toggle('translate-x-full');
+                document.body.classList.toggle('overflow-hidden');
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
+
+            // --- 3. Scroll Reveal Animation ---
+            const revealElements = document.querySelectorAll('.reveal, .reveal-left');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // --- 4. Aiko AI Chat Logic (Teched Studios) ---
+            const aikoToggleBtn = document.getElementById('aiko-toggle-btn');
+            const closeAikoBtn = document.getElementById('close-aiko-btn');
+            const aikoChatWindow = document.getElementById('aiko-chat-window');
+            const aikoForm = document.getElementById('aiko-form');
+            const aikoInput = document.getElementById('aiko-input');
+            const aikoChatBody = document.getElementById('aiko-chat-body');
+
+            let isAikoOpen = false;
+            let hasRepliedDemo = false;
+
+            function toggleAiko() {
+                isAikoOpen = !isAikoOpen;
+                if (isAikoOpen) {
+                    aikoChatWindow.classList.remove('hidden');
+                    setTimeout(() => {
+                        aikoChatWindow.classList.remove('scale-95', 'opacity-0');
+                        aikoChatWindow.classList.add('scale-100', 'opacity-100');
+                        aikoInput.focus();
+                    }, 10);
+                    
+                    if (!hasRepliedDemo) {
+                         setTimeout(() => {
+                             triggerDemoReply();
+                         }, 800);
+                    }
+                } else {
+                    aikoChatWindow.classList.remove('scale-100', 'opacity-100');
+                    aikoChatWindow.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        aikoChatWindow.classList.add('hidden');
+                    }, 300);
+                }
+            }
+
+            aikoToggleBtn.addEventListener('click', toggleAiko);
+            closeAikoBtn.addEventListener('click', toggleAiko);
+
+            function addUserMessage(msg) {
+                const msgHTML = `
+                    <div class="flex items-end justify-end mb-2 reveal active">
+                        <div class="bg-pine-950 text-white p-3.5 rounded-2xl rounded-tr-sm text-sm shadow-md max-w-[85%] leading-relaxed">
+                            ${msg}
+                        </div>
+                    </div>
+                `;
+                aikoChatBody.insertAdjacentHTML('beforeend', msgHTML);
+                scrollToBottom();
+            }
+
+            function triggerDemoReply() {
+                if(hasRepliedDemo) return;
+                
+                const typingId = 'typing-' + Date.now();
+                const typingHTML = `
+                    <div id="${typingId}" class="flex items-start gap-3 mb-2 transition-opacity reveal active">
+                        <div class="w-7 h-7 rounded-full bg-pine-900 flex-shrink-0 flex items-center justify-center text-white text-[10px] font-bold mt-1 shadow-sm">A</div>
+                        <div class="bg-white p-4 rounded-2xl rounded-tl-sm text-sm text-slate-800 shadow-sm border border-misty-200 flex gap-1.5 items-center">
+                            <span class="w-1.5 h-1.5 bg-amber-500/60 rounded-full animate-bounce"></span>
+                            <span class="w-1.5 h-1.5 bg-amber-500/60 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                            <span class="w-1.5 h-1.5 bg-amber-500/60 rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
+                        </div>
+                    </div>
+                `;
+                aikoChatBody.insertAdjacentHTML('beforeend', typingHTML);
+                scrollToBottom();
+
+                setTimeout(() => {
+                    const typingElement = document.getElementById(typingId);
+                    if(typingElement) typingElement.remove();
+                    
+                    const replyHTML = `
+                        <div class="flex items-start gap-3 mb-2 reveal active">
+                            <div class="w-7 h-7 rounded-full bg-pine-900 flex-shrink-0 flex items-center justify-center text-white text-[10px] font-bold mt-1 shadow-sm">A</div>
+                            <div class="bg-white p-4 rounded-2xl rounded-tl-sm text-sm text-slate-700 shadow-md border border-amber-500/40 leading-relaxed">
+                                Hi there! I'm Aiko AI. This is currently just a demo version, but I'll be fully operational soon to assist with your Mussoorie getaway! ✨
+                            </div>
+                        </div>
+                    `;
+                    aikoChatBody.insertAdjacentHTML('beforeend', replyHTML);
+                    scrollToBottom();
+                    hasRepliedDemo = true;
+                }, 1500);
+            }
+
+            function scrollToBottom() {
+                aikoChatBody.scrollTo({
+                    top: aikoChatBody.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+
+            aikoForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const text = aikoInput.value.trim();
+                if (!text) return;
+                
+                addUserMessage(text);
+                aikoInput.value = '';
+                
+                if(!hasRepliedDemo) {
+                    triggerDemoReply();
+                } else {
+                     setTimeout(() => {
+                        const genericHTML = `
+                            <div class="flex items-start gap-3 mb-2 reveal active">
+                                <div class="w-7 h-7 rounded-full bg-pine-900 flex-shrink-0 flex items-center justify-center text-white text-[10px] font-bold mt-1 shadow-sm">A</div>
+                                <div class="bg-white p-3.5 rounded-2xl rounded-tl-sm text-sm text-slate-700 shadow-sm border border-misty-200 leading-relaxed">
+                                    I am in demo mode right now, but please use the WhatsApp button to book your stay! 🏔️
+                                </div>
+                            </div>
+                        `;
+                        aikoChatBody.insertAdjacentHTML('beforeend', genericHTML);
+                        scrollToBottom();
+                    }, 800);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
